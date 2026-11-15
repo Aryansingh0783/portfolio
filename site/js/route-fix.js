@@ -34,7 +34,9 @@
   var style = document.createElement('style');
   style.textContent =
     'a[href$="#pricing"],*:has(> a[href$="#pricing"]):not(body):not(html):not(nav):not(footer){display:none!important}' +
-    'a[href$="/404"],a[href^="https://www.framer.com"]{display:none!important}';
+    'a[href$="/404"],a[href^="https://www.framer.com"]{display:none!important}' +
+    // phone footer: the AS monogram was cut off at the right edge
+    '@media (max-width:809.98px){.framer-1qryuji{font-size:28px!important;white-space:nowrap;transform:translateX(-18px)}}';
   document.head.appendChild(style);
 
   // The Framer runtime rewrites <title> and the canonical link on load and on every in-app navigation.

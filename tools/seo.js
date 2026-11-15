@@ -175,6 +175,11 @@ const TEXT = [
   [">View Project<", ">View Profile<"],
   [">Identity<", ">Software<"],
   [">Lab<", ">Resume<"], [">Lab (Blog)<", ">Resume<"],
+  // phone footer icon row (template author's accounts -> this site's)
+  ['href="https://x.com/tamasbodo"', 'href="https://github.com/Aryansingh0783"'],
+  ['href="https://youtube.com"', 'href="https://wa.me/919821391991"'],
+  ['href="https://linkedin.com"', 'href="https://linkedin.com/in/aryansingh0783"'],
+  ['href="https:/instagram.com"', 'href="https://www.instagram.com/aryansinghxoxo/"'],
   ["and test them until they hold.", "then test them until they hold, from the first prototype to the last release."],
   ["Speed is easy. Getting it right takes longer. We'd rather take the time upfront than spend twice as long fixing it after.", "Speed is easy. Getting it right takes longer. I would rather spend the time upfront than twice as long fixing it after."],
   ["Strategy, design, and build stay in the same room. When they don't, something always gets lost between the idea and the thing that ships.", "Design, code and tests stay together. When they split apart, something always gets lost between the idea and the thing that ships."],
