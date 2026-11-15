@@ -159,7 +159,8 @@
     
     <!-- End of headEnd -->
 	
-<link rel="stylesheet" href="/css/cyberpunk-core.css"><style id="no-xscroll">html,body{overflow-x:clip}</style><style id="mobile-fixes">@media (max-width:809.98px){.framer-17ylgtj-container,.framer-1tymd0l{height:auto!important}}</style><style id="theme-tokens">:root{--cp-yellow:#f94137;--cp-yellow-dim:rgba(249,65,55,.15);--cp-yellow-glow:rgba(249,65,55,.45);--cp-cyan:#e8d9c8;--cp-cyan-dim:rgba(232,217,200,.15);--cp-cyan-glow:rgba(232,217,200,.35);--cp-red:#f94137;--cp-red-dim:rgba(249,65,55,.15);--cp-bg-black:#000;--cp-bg-primary:#050609;--cp-bg-secondary:#0a0b10;--cp-bg-tertiary:#12131a;--cp-bg-card:#050609;--cp-text-main:#fff;--cp-text-muted:#adadad;--cp-text-dim:#7a7a7a;--cp-font-display:"Plus Jakarta Sans Variable","Plus Jakarta Sans",sans-serif;--cp-font-heading:"Plus Jakarta Sans Variable","Plus Jakarta Sans",sans-serif;--cp-font-body:"Plus Jakarta Sans Variable","Plus Jakarta Sans",sans-serif}</style><link rel="stylesheet" href="/css/hero-waves.css">
+<link rel="stylesheet" href="/css/cyberpunk-core.css"><style id="perf-phone">html.no-waves #hero-waves{background-color:#050609;background-image:linear-gradient(rgba(5,6,9,0) 55%,#050609 100%),radial-gradient(rgba(232,217,200,.30) 1px,transparent 1.7px),radial-gradient(120% 60% at 85% 0%,rgba(232,217,200,.07),transparent 60%),radial-gradient(90% 50% at 0% 100%,rgba(249,65,55,.10),transparent 70%);background-size:100% 100%,9px 9px,100% 100%,100% 100%}</style><style id="no-xscroll">html,body{overflow-x:clip}</style><style id="mobile-fixes">@media (max-width:809.98px){.framer-17ylgtj-container,.framer-1tymd0l{height:auto!important}}</style><style id="theme-tokens">:root{--cp-yellow:#f94137;--cp-yellow-dim:rgba(249,65,55,.15);--cp-yellow-glow:rgba(249,65,55,.45);--cp-cyan:#e8d9c8;--cp-cyan-dim:rgba(232,217,200,.15);--cp-cyan-glow:rgba(232,217,200,.35);--cp-red:#f94137;--cp-red-dim:rgba(249,65,55,.15);--cp-bg-black:#000;--cp-bg-primary:#050609;--cp-bg-secondary:#0a0b10;--cp-bg-tertiary:#12131a;--cp-bg-card:#050609;--cp-text-main:#fff;--cp-text-muted:#adadad;--cp-text-dim:#7a7a7a;--cp-font-display:"Plus Jakarta Sans Variable","Plus Jakarta Sans",sans-serif;--cp-font-heading:"Plus Jakarta Sans Variable","Plus Jakarta Sans",sans-serif;--cp-font-body:"Plus Jakarta Sans Variable","Plus Jakarta Sans",sans-serif}</style><link rel="stylesheet" href="/css/hero-waves.css">
+
 
 
 
@@ -292,39 +293,46 @@ html.lenis body {
 	<!-- Start of bodyEnd -->
     
     <!-- End of bodyEnd -->
-<script src="/js/lenis-smooth.js"></script><script src="/js/hero-waves.js"></script><script src="/js/cyberpunk-fx.js"></script><style id="id-card-css">
-#id-card-btn,#id-card-back{display:none}
+<script src="/js/lenis-smooth.js"></script><script id="waves-loader">(function(){var m=window.matchMedia,coarse=m&&m("(pointer: coarse)").matches,reduce=m&&m("(prefers-reduced-motion: reduce)").matches;if(coarse||reduce||window.innerWidth<=900){document.documentElement.classList.add("no-waves");return}var s=document.createElement("script");s.src="/js/hero-waves.js";s.async=true;document.body.appendChild(s)})();</script><script src="/js/cyberpunk-fx.js"></script><style id="id-card-css">
+#id-card-btn,#id-card-back,#id-card-img{display:none}
 @media (max-width:900px){
-  #id-card-zone{display:none!important}
-  #id-card{left:50%!important;margin-left:-405px;width:810px!important;height:560px!important;top:60px!important;transform-origin:50% 0}
-  #id-card-btn{display:flex;align-items:center;gap:8px;position:absolute;top:70px;right:16px;z-index:7;padding:9px 13px;border:1px solid rgba(232,217,200,.35);border-radius:999px;background:rgba(5,6,9,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#e8d9c8;font:600 11px/1 "Plus Jakarta Sans Variable","Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  #id-card,#id-card-zone{display:none!important}
+  #id-card-btn{display:flex;align-items:center;gap:8px;position:absolute;top:70px;right:16px;z-index:7;padding:9px 13px;border:1px solid rgba(232,217,200,.35);border-radius:999px;background:rgba(5,6,9,.7);color:#e8d9c8;font:600 11px/1 "Plus Jakarta Sans Variable","Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent}
   #id-card-btn i{display:block;width:6px;height:6px;border-right:1.5px solid #f94137;border-bottom:1.5px solid #f94137;transform:rotate(45deg) translateY(-2px);transition:transform .3s}
   #id-card-btn[aria-expanded="true"] i{transform:rotate(-135deg) translateY(-2px)}
-  #id-card-back{position:fixed;inset:0;z-index:4;background:rgba(5,6,9,.55)}
+  #id-card-back{position:fixed;inset:0;z-index:4;background:rgba(5,6,9,.62)}
   #id-card-back.on{display:block}
+  /* the card is a pre-rendered 48KB image on phones: no second app to download, just a CSS drop and sway */
+  #id-card-img{display:block;position:absolute;top:56px;left:50%;width:min(66vw,300px);height:auto;transform-origin:50% 0;transform:translate(-50%,-125%);pointer-events:none;z-index:5;will-change:transform;visibility:hidden}
+  #id-card-img.open{visibility:visible;animation:idDrop 1.3s cubic-bezier(.22,.9,.3,1) forwards,idSway 3.4s ease-in-out 1.3s infinite}
+  #id-card-img.closing{visibility:visible;animation:idUp .45s cubic-bezier(.5,0,.8,.4) forwards}
+  @keyframes idDrop{0%{transform:translate(-50%,-125%) rotate(0)}42%{transform:translate(-50%,3%) rotate(0)}58%{transform:translate(-50%,-1.5%) rotate(5deg)}74%{transform:translate(-50%,.5%) rotate(-3deg)}100%{transform:translate(-50%,0) rotate(0)}}
+  @keyframes idSway{0%,100%{transform:translate(-50%,0) rotate(0)}50%{transform:translate(-50%,0) rotate(1.4deg)}}
+  @keyframes idUp{from{transform:translate(-50%,0) rotate(0)}to{transform:translate(-50%,-125%) rotate(0)}}
 }
-</style><div id="id-card-wrap" style="position:absolute;top:0;left:0;width:100%;height:0;overflow-x:clip;overflow-y:visible;pointer-events:none;z-index:5"><iframe id="id-card" title="ID card" scrolling="no" allowtransparency="true" data-src="/hero/" style="position:absolute;top:0;left:max(0px,calc(78vw - 405px));width:min(810px,100vw);height:min(560px,75vh);border:0;background:transparent;z-index:5;clip-path:inset(0 140px);pointer-events:none;transform:translateY(-820px) scale(1.35);transform-origin:50% 0;transition:transform .6s cubic-bezier(.16,1,.3,1)"></iframe></div><div id="id-card-zone" style="position:absolute;top:52px;left:calc(max(0px,calc(78vw - 405px)) + 135px);width:540px;height:280px;z-index:6"></div><div id="id-card-back"></div><button id="id-card-btn" type="button" aria-expanded="false" aria-controls="id-card">ID card<i></i></button><script id="id-card-peek">(function(){
-var f=document.getElementById('id-card'),z=document.getElementById('id-card-zone'),btn=document.getElementById('id-card-btn'),back=document.getElementById('id-card-back');
+@media (prefers-reduced-motion:reduce){#id-card-img.open,#id-card-img.closing{animation:none!important;transform:translate(-50%,0)}#id-card-img.closing{visibility:hidden}}
+</style><div id="id-card-wrap" style="position:absolute;top:0;left:0;width:100%;height:0;overflow-x:clip;overflow-y:visible;pointer-events:none;z-index:5"><iframe id="id-card" title="ID card" scrolling="no" allowtransparency="true" data-src="/hero/" style="position:absolute;top:0;left:max(0px,calc(78vw - 405px));width:min(810px,100vw);height:min(560px,75vh);border:0;background:transparent;z-index:5;clip-path:inset(0 140px);pointer-events:none;transform:translateY(-820px) scale(1.35);transform-origin:50% 0;transition:transform .6s cubic-bezier(.16,1,.3,1)"></iframe><img id="id-card-img" alt="Aryan Singh's ID card" src="/assets/id-card.webp" width="514" height="888" loading="lazy" decoding="async"></div><div id="id-card-zone" style="position:absolute;top:52px;left:calc(max(0px,calc(78vw - 405px)) + 135px);width:540px;height:280px;z-index:6"></div><div id="id-card-back"></div><button id="id-card-btn" type="button" aria-expanded="false" aria-controls="id-card-img">ID card<i></i></button><script id="id-card-peek">(function(){
+var f=document.getElementById('id-card'),z=document.getElementById('id-card-zone'),btn=document.getElementById('id-card-btn'),back=document.getElementById('id-card-back'),img=document.getElementById('id-card-img');
 if(!f||!z)return;
 var open=false,tIn,tOut,tAuto,lock=0,loaded=false,
     reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,
     small=function(){return window.innerWidth<=900};
-// the card art itself is about 196px wide at scale 1: make it ~72% of the screen width on phones
-function sc(){return small()?Math.min(1.5,Math.max(.9,window.innerWidth*.72/196)):1.35}
-function rest(){return small()?'translateY('+(-(560*sc()+140))+'px) scale('+sc()+')':'translateY(-820px) scale(1.35)'}
-function opened(){return 'translateY(0) scale('+sc()+')'}
 function load(){if(loaded){try{f.contentWindow.location.reload()}catch(e){}return}loaded=true;f.src=f.getAttribute('data-src')}
-function show(){if(open||Date.now()<lock)return;open=true;clearTimeout(tOut);load();
-  f.style.pointerEvents='auto';f.style.transform=opened();
-  if(small()){btn.setAttribute('aria-expanded','true');back.classList.add('on');clearTimeout(tAuto);tAuto=setTimeout(hide,5500)}}
-function hide(){if(!open)return;open=false;lock=Date.now()+800;clearTimeout(tAuto);
-  f.style.pointerEvents='none';f.style.transform=rest();
+// ---- desktop: hover the zone, the real card (an iframe) drops down ----
+function showDesktop(){load();f.style.pointerEvents='auto';f.style.transform='translateY(0) scale(1.35)'}
+function hideDesktop(){f.style.pointerEvents='none';f.style.transform='translateY(-820px) scale(1.35)'}
+// ---- phones: a pre-rendered image drops with a CSS swing ----
+function showPhone(){
+  img.classList.remove('closing');void img.offsetWidth;img.classList.add('open');
+  btn.setAttribute('aria-expanded','true');back.classList.add('on');clearTimeout(tAuto);tAuto=setTimeout(hide,5500)}
+function hidePhone(){if(!img.classList.contains('open'))return;img.classList.remove('open');img.classList.add('closing');
+  setTimeout(function(){img.classList.remove('closing')},480);
   btn.setAttribute('aria-expanded','false');back.classList.remove('on')}
-f.style.transform=rest();
-// desktop: warm the card up shortly after load so the first hover is instant (phones wait for the first tap)
-if(!small())window.addEventListener('load',function(){setTimeout(function(){if(!loaded){loaded=true;f.src=f.getAttribute('data-src')}},1500)});
+function show(){if(open||Date.now()<lock)return;open=true;clearTimeout(tOut);small()?showPhone():showDesktop()}
+function hide(){if(!open)return;open=false;lock=Date.now()+800;clearTimeout(tAuto);small()?hidePhone():hideDesktop()}
 if(reduce)f.style.transition='none';
-// desktop: hover the zone
+// desktop: warm the card up shortly after load so the first hover is instant
+if(!small())window.addEventListener('load',function(){setTimeout(function(){if(!loaded){loaded=true;f.src=f.getAttribute('data-src')}},1500)});
 z.addEventListener('mouseenter',function(){clearTimeout(tIn);tIn=setTimeout(show,150)});
 z.addEventListener('mouseleave',function(){clearTimeout(tIn);if(open){clearTimeout(tOut);tOut=setTimeout(hide,600)}});
 f.addEventListener('mouseenter',function(){if(!small())clearTimeout(tOut)});
@@ -333,8 +341,7 @@ f.addEventListener('mouseleave',function(){if(!small()){clearTimeout(tOut);tOut=
 btn.addEventListener('click',function(){open?hide():show()});
 back.addEventListener('click',hide);
 window.addEventListener('scroll',function(){if(open&&small()&&Math.abs(window.scrollY)>120)hide()},{passive:true});
-window.addEventListener('resize',function(){f.style.transform=open?opened():rest()});
-// one friendly peek per visit on phones, once the page has settled
-if(small()&&!reduce){try{if(!sessionStorage.getItem('idPeek')){sessionStorage.setItem('idPeek','1');setTimeout(function(){if(window.scrollY<40)show()},2200)}}catch(e){}}
+// one friendly peek per visit on phones, once the page has settled (it is only a 48KB image now)
+if(small()&&!reduce){try{if(!sessionStorage.getItem('idPeek')){sessionStorage.setItem('idPeek','1');setTimeout(function(){if(window.scrollY<40)show()},2600)}}catch(e){}}
 })();</script><script src="/js/route-fix.js"></script></body>
 </html>

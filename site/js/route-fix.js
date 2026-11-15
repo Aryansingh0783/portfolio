@@ -41,6 +41,8 @@
     // Let them show their text (only on phones; desktop is untouched).
     '@media (max-width:809.98px){' +
       'svg:has(foreignObject){overflow:visible}' +
+      // decorative full-screen noise canvases (multiply-blended) are costly on phones and add nothing visible
+      'canvas{display:none!important}' +
       '.framer-text{word-break:normal!important;overflow-wrap:break-word!important;hyphens:none!important}' +
       '.framer-b20o2j,.framer-vu1qqr,.framer-11p5kdg,.framer-r9rknz,.framer-oyfhc1,.framer-1f6qdu0,.framer-1d050d4,.framer-11wzu55,.framer-fcwmu0,.framer-ax6hht,.framer-1sxw03i,.framer-w0x6hk{overflow:visible!important}' +
       '.framer-b20o2j{height:auto!important;min-height:0!important}' +
