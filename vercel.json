@@ -36,6 +36,16 @@
       "source": "/lab/:path*",
       "destination": "/resume/",
       "permanent": true
+    },
+    {
+      "source": "/projects/:path*/",
+      "destination": "/all-projects/",
+      "permanent": true
+    },
+    {
+      "source": "/lab/:path*/",
+      "destination": "/resume/",
+      "permanent": true
     }
   ],
   "headers": [
