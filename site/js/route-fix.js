@@ -36,7 +36,19 @@
     'a[href$="#pricing"],*:has(> a[href$="#pricing"]):not(body):not(html):not(nav):not(footer){display:none!important}' +
     'a[href$="/404"],a[href^="https://www.framer.com"]{display:none!important}' +
     // phone footer: the AS monogram was cut off at the right edge
-    '@media (max-width:809.98px){.framer-1qryuji{font-size:28px!important;white-space:nowrap;transform:translateX(-18px)}}';
+    '@media (max-width:809.98px){.framer-1qryuji{font-size:28px!important;white-space:nowrap;transform:translateX(-18px)}}' +
+    // phone: text boxes the template sized for its own copy cut off the last line / descenders of ours.
+    // Let them show their text (only on phones; desktop is untouched).
+    '@media (max-width:809.98px){' +
+      'svg:has(foreignObject){overflow:visible}' +
+      '.framer-text{word-break:normal!important;overflow-wrap:break-word!important;hyphens:none!important}' +
+      '.framer-b20o2j,.framer-vu1qqr,.framer-11p5kdg,.framer-r9rknz,.framer-oyfhc1,.framer-1f6qdu0,.framer-1d050d4,.framer-11wzu55,.framer-fcwmu0,.framer-ax6hht,.framer-1sxw03i,.framer-w0x6hk{overflow:visible!important}' +
+      '.framer-b20o2j{height:auto!important;min-height:0!important}' +
+      '.framer-1cnmkew,.framer-1cnmkew *,.framer-q925fc{overflow:visible!important}' +
+      '.framer-9pammg-container,.framer-SmcJv.framer-zd7D0{height:auto!important;min-height:0!important;overflow:visible!important}' +
+    '}' +
+    // very narrow phones: the About headline would run off the screen
+    '@media (max-width:360px){h1.framer-styles-preset-14ih7zs,h1.framer-styles-preset-14ih7zs *,.framer-styles-preset-7dwwu,.framer-styles-preset-7dwwu *{font-size:9.4vw!important}}';
   document.head.appendChild(style);
 
   // The Framer runtime rewrites <title> and the canonical link on load and on every in-app navigation.
