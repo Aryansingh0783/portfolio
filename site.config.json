@@ -1,16 +1,24 @@
 {
-  "siteUrl": "",
+  "siteUrl": "https://itsmearyansingh.vercel.app",
   "person": {
     "name": "Aryan Singh",
-    "jobTitle": "AI Engineer",
-    "description": "AI engineer in Delhi who builds and tests AI tools, desktop apps and web apps.",
+    "jobTitle": "AI Solutions Engineer",
+    "description": "AI solutions engineer in Delhi who builds and tests AI tools, desktop apps and web apps.",
     "city": "Delhi",
     "country": "IN",
-    "knowsAbout": ["Artificial intelligence", "Machine learning", "Python", "TypeScript", "JavaScript", "Rust", "React", "Node.js", "PySpark", "Software testing"],
+    "knowsAbout": ["Artificial intelligence", "Machine learning", "Python", "SQL", "TypeScript", "JavaScript", "Rust", "React", "Node.js", "PySpark", "Software testing", "AI video", "Landing pages"],
     "sameAs": [
       "https://github.com/Aryansingh0783",
       "https://linkedin.com/in/aryansingh0783",
       "https://www.instagram.com/aryansinghxoxo/"
+    ],
+    "worksFor": "The Growth Engine",
+    "alumniOf": "Bennett University",
+    "credentials": [
+      "IBM: Data Analysis with Python",
+      "Google: Bits and Bytes of Computer Networking",
+      "University of Colorado Boulder: Predictive Modeling and Analysis",
+      "SUNY: Practical Time Series Analysis"
     ]
   }
 }

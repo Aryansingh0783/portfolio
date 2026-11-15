@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /404.html
 
-# The Sitemap line is added when siteUrl is set in site.config.json
+Sitemap: https://itsmearyansingh.vercel.app/sitemap.xml

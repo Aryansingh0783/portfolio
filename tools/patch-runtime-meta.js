@@ -25,3 +25,11 @@ console.log(s.slice(80, 520));
 
 const vf = fs.readdirSync(D).find((n) => n.startsWith("V-e4DQ8R8hTQJqqy"));
 if (vf) wr(vf, rd(vf).replace("Aryan Singh | AI Solutions Engineer", "Aryan Singh"));
+
+// nav labels: the template's "Lab" blog link becomes "Resume" (the link itself is redirected by js/route-fix.js)
+{
+  let m = rd("script_main.f9EtaUn0.mjs");
+  const pairs = [["dOHw3iCjm:`Lab`", "dOHw3iCjm:`Resume`"], ["dOHw3iCjm:`Lab (Blog)`", "dOHw3iCjm:`Resume`"]];
+  for (const [a, b] of pairs) { console.log(a, m.split(a).length - 1); m = m.split(a).join(b); }
+  wr("script_main.f9EtaUn0.mjs", m);
+}

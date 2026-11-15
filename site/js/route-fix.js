@@ -15,7 +15,7 @@
     } catch (e) { return ''; }
   };
 
-  var STATIC = { '/projects': '/all-projects/', '/all-projects': '/all-projects/', '/privacy-policy': '/privacy-policy/', '/terms-of-service': '/terms-of-service/', '/disclaimer': '/disclaimer/' };
+  var STATIC = { '/projects': '/all-projects/', '/all-projects': '/all-projects/', '/lab': '/resume/', '/resume': '/resume/', '/privacy-policy': '/privacy-policy/', '/terms-of-service': '/terms-of-service/', '/disclaimer': '/disclaimer/' };
 
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a');
@@ -33,7 +33,6 @@
 
   var style = document.createElement('style');
   style.textContent =
-    'a[href$="/lab"],a[href$="/lab/"],[data-framer-name="Lab"],*:has(> a[href$="/lab"]):not(body):not(html):not(nav):not(footer){display:none!important}' +
     'a[href$="#pricing"],*:has(> a[href$="#pricing"]):not(body):not(html):not(nav):not(footer){display:none!important}' +
     'a[href$="/404"],a[href^="https://www.framer.com"]{display:none!important}';
   document.head.appendChild(style);
@@ -68,6 +67,6 @@
   setInterval(function () {
     var p = norm(location.pathname);
     if (p === '/projects' || p.indexOf('/projects/') === 0) location.replace('/all-projects/');
-    else if (p === '/lab' || p.indexOf('/lab/') === 0) location.replace('/');
+    else if (p === '/lab' || p.indexOf('/lab/') === 0) location.replace('/resume/');
   }, 250);
 })();

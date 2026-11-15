@@ -53,6 +53,9 @@ const PAGES = [
   { path: "/all-projects/", file: "all-projects/index.html", title: "Projects | Aryan Singh",
     desc: PROJECTS.length + " projects by Aryan Singh: Superposition, Refract, ReBackUp, RestoreForge AI, ezCLI and more. AI tools, desktop apps and web apps with live links.",
     kind: "projects", priority: "0.9" },
+  { path: "/resume/", file: "resume/index.html", title: "Resume | Aryan Singh, AI Solutions Engineer",
+    desc: "Resume of Aryan Singh, AI solutions engineer in Delhi: AI landing pages, ad creatives and video, agentic tools, ML pipelines in PySpark, and well-tested apps. Download the PDF.",
+    kind: "resume", priority: "0.9" },
   { path: "/privacy-policy/", file: "privacy-policy/index.html", title: "Privacy Policy | Aryan Singh",
     desc: "This site sets no cookies and runs no analytics or ads. Here is exactly what data is, and is not, collected.", kind: "legal", priority: "0.3" },
   { path: "/terms-of-service/", file: "terms-of-service/index.html", title: "Terms of Service | Aryan Singh",
@@ -69,6 +72,9 @@ function personNode() {
     address: { "@type": "PostalAddress", addressLocality: P.city, addressCountry: P.country },
     knowsAbout: P.knowsAbout, sameAs: P.sameAs,
   };
+  if (P.worksFor) n.worksFor = { "@type": "Organization", name: P.worksFor };
+  if (P.alumniOf) n.alumniOf = { "@type": "CollegeOrUniversity", name: P.alumniOf };
+  if (P.credentials) n.hasCredential = P.credentials.map((c) => ({ "@type": "EducationalOccupationalCredential", name: c }));
   if (SITE_URL) { n.url = SITE_URL + "/"; n.image = SITE_URL + "/og-image.jpg"; }
   return n;
 }
@@ -78,11 +84,13 @@ function jsonld(page) {
   if (SITE_URL) siteNode.url = SITE_URL + "/";
   if (page.kind === "home") g.push(personNode(), siteNode);
   else {
-    const label = { about: "About", contact: "Contact", projects: "Projects" }[page.kind] || page.title.split(" | ")[0];
+    const label = { about: "About", contact: "Contact", projects: "Projects", resume: "Resume" }[page.kind] || page.title.split(" | ")[0];
     const crumb = { "@type": "BreadcrumbList", itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: abs("/") },
       { "@type": "ListItem", position: 2, name: label, item: abs(page.path) } ] };
-    if (page.kind === "about") g.push({ "@type": "ProfilePage", "@id": abs(page.path) + "#page", name: page.title, description: page.desc, mainEntity: personNode(), breadcrumb: crumb });
+    if (page.kind === "resume") g.push({ "@type": "ProfilePage", "@id": abs(page.path) + "#page", name: page.title, description: page.desc, mainEntity: personNode(), breadcrumb: crumb,
+      associatedMedia: { "@type": "MediaObject", contentUrl: abs("/assets/Aryan-Singh-Resume.pdf"), encodingFormat: "application/pdf", name: "Aryan Singh resume (PDF)" } });
+    else if (page.kind === "about") g.push({ "@type": "ProfilePage", "@id": abs(page.path) + "#page", name: page.title, description: page.desc, mainEntity: personNode(), breadcrumb: crumb });
     else if (page.kind === "contact") g.push({ "@type": "ContactPage", "@id": abs(page.path) + "#page", name: page.title, description: page.desc, about: { "@id": abs("/") + "#person" }, breadcrumb: crumb }, personNode());
     else if (page.kind === "projects") {
       g.push({ "@type": "CollectionPage", "@id": abs(page.path) + "#page", name: page.title, description: page.desc, breadcrumb: crumb, author: { "@id": abs("/") + "#person" },
@@ -140,7 +148,12 @@ function stripHead(h) {
   h = h.replace(/<script[^>]*events\.framer\.com\/script\.js[^>]*><\/script>/g, "");
   return h;
 }
-function stampHead(h, page) { return stripHead(h).replace("</head>", headBlock(page) + "\n</head>"); }
+function stampHead(h, page) {
+  h = stripHead(h).replace("</head>", headBlock(page) + "\n</head>");
+  // Framer pages: the runtime renders "./x" links; a root base makes them resolve from the site root on every page
+  if (["home", "about", "contact"].includes(page.kind) && !/<base /.test(h)) h = h.replace(/<head>/, '<head><base href="/">');
+  return h;
+}
 
 // ---- text patches: raw HTML must say what the rendered page says ----
 const TEXT = [
@@ -161,6 +174,7 @@ const TEXT = [
   ["<span >Python</span> <span >Identity</span>", "<span >Data Analysis</span> <span >with Python</span>"],
   [">View Project<", ">View Profile<"],
   [">Identity<", ">Software<"],
+  [">Lab<", ">Resume<"], [">Lab (Blog)<", ">Resume<"],
   ["and test them until they hold.", "then test them until they hold, from the first prototype to the last release."],
   ["Speed is easy. Getting it right takes longer. We'd rather take the time upfront than spend twice as long fixing it after.", "Speed is easy. Getting it right takes longer. I would rather spend the time upfront than twice as long fixing it after."],
   ["Strategy, design, and build stay in the same room. When they don't, something always gets lost between the idea and the thing that ships.", "Design, code and tests stay together. When they split apart, something always gets lost between the idea and the thing that ships."],
@@ -192,6 +206,11 @@ function patchSSR(h, page) {
   for (const [a, b] of TEXT) if (a !== b) h = h.split(a).join(b);
   h = removeDivByClass(h, "framer-1bzxyt1"); // "Get Template" badge from the template
   h = patchPhrases(h);
+  // The template writes internal links as "./page" (relative to the current folder), which crawlers resolve
+  // wrongly on subpages (/about/projects). Point them at the real, final URLs.
+  const LINKS = { "./": "/", "./about": "/about/", "./contact": "/contact/", "./projects": "/all-projects/", "./lab": "/resume/",
+    "./privacy-policy": "/privacy-policy/", "./terms-of-service": "/terms-of-service/", "./disclaimer": "/disclaimer/", "./#services": "/#services" };
+  h = h.replace(/href="(\.\/[^"]*)"/g, (all, v) => (LINKS[v] ? 'href="' + LINKS[v] + '"' : all));
   if (page.kind === "contact" && !h.includes('id="seo-h1"')) h = h.replace('<div id="main"', '<h1 id="seo-h1" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">Contact Aryan Singh</h1><div id="main"');
   return h;
 }
@@ -219,6 +238,7 @@ const NAV = `<header class="nav">
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/all-projects/"{{PROJ}}>Projects</a></li>
+      <li><a href="/resume/"{{RES}}>Resume</a></li>
       <li><a href="/about/">About</a></li>
       <li><a href="/contact/">Contact</a></li>
     </ul>
@@ -239,7 +259,7 @@ function shell(page, bodyInner, scripts) {
 </head>
 <body class="cp-scanlines">
   <div id="cpScrollProgress"></div>
-  ${NAV.replace("{{PROJ}}", page.kind === "projects" ? ' aria-current="page"' : "")}
+  ${NAV.replace("{{PROJ}}", page.kind === "projects" ? ' aria-current="page"' : "").replace("{{RES}}", page.kind === "resume" ? ' aria-current="page"' : "")}
   <main class="wrap">
 ${bodyInner}
     ${FOOT}
@@ -272,6 +292,75 @@ ${rows}
     </section>`;
   write(page.file, shell(page, body, COMMON_SCRIPTS));
   log.push("built all-projects (" + PROJECTS.length + " rows)");
+}
+
+// ---- Resume page: the resume as real HTML (searchable, readable) plus the PDF ----
+{
+  const page = PAGES.find((p) => p.kind === "resume");
+  const job = (org, loc, role, dates, bullets) => `
+      <div class="job"><div class="jh"><h3>${esc(org)}</h3><span class="loc">${esc(loc)}</span></div>
+        <div class="jr"><em>${esc(role)}</em><span class="dt">${esc(dates)}</span></div>
+        <ul>${bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`;
+  const proj = (name, what, stack, bullets) => `
+      <div class="job"><div class="jh"><h3>${esc(name)}</h3></div>
+        <div class="jr"><em>${esc(what)}</em></div><p class="stack">${esc(stack)}</p>
+        <ul>${bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`;
+  const skill = (k, v) => `<div class="sk"><span>${esc(k)}</span><p>${esc(v)}</p></div>`;
+  const body = `    <article class="prose resume">
+      <div class="eyebrow">+ Resume</div>
+      <h1>Aryan Singh</h1>
+      <p class="lede">AI Solutions Engineer. Delhi, India.</p>
+      <div class="cta-row">
+        <a class="btn" href="/assets/Aryan-Singh-Resume.pdf" download>Download PDF &#8595;</a>
+        <a class="btn ghost" href="/assets/Aryan-Singh-Resume.pdf" target="_blank" rel="noopener">Open in new tab &#8599;</a>
+        <a class="btn ghost" href="mailto:${EMAIL}">Email me</a>
+      </div>
+      <p class="meta"><a href="https://github.com/Aryansingh0783" target="_blank" rel="noopener">GitHub</a> &nbsp;/&nbsp; <a href="https://linkedin.com/in/aryansingh0783" target="_blank" rel="noopener">LinkedIn</a> &nbsp;/&nbsp; <a href="mailto:${EMAIL}">${EMAIL}</a></p>
+
+      <h2>Summary</h2>
+      <p>AI Solutions Engineer and B.Tech Computer Science graduate who builds AI-driven products end to end. Currently shipping AI-powered landing pages, ad creatives, AI video and agentic coding tools for clients at a performance marketing agency. Proficient in Python, SQL and TypeScript, with hands-on experience building ML pipelines, big-data workflows in PySpark, and well-tested applications across web, desktop and cloud.</p>
+
+      <h2>Experience</h2>${job("The Growth Engine", "Delhi, India", "AI Solutions Engineer", "Sep 2026 – Present", [
+        "Deliver AI-driven work for a performance marketing agency's clients, reporting directly to the founder: UI/UX design, landing pages, ad creatives and AI-generated video.",
+        "Built conversion landing pages and wrote Meta ad video scripts for a healthcare clinic's campaign, following a research, analysis, copy and page workflow, and produced AI avatar videos with HeyGen.",
+        "Producing a multi-asset series of brand-affinity social posts and short-form videos for a women's campus-safety app.",
+        "Build agentic coding tools and a reusable client production kit that speed up how the team researches, writes and ships client deliverables."])}${job("Reduced Debts Financial Services", "Noida, Uttar Pradesh, India", "Junior Analyst (Internship)", "Aug 2025 – May 2026", [
+        "Collected, cleaned and validated datasets to extract insights and ensure accuracy for ongoing projects.",
+        "Built dashboards and reports with Excel and SQL, and supported market research and client outreach."])}
+
+      <h2>Education</h2>
+      <div class="job"><div class="jh"><h3>Bennett University</h3><span class="loc">Greater Noida, India</span></div>
+        <div class="jr"><em>B.Tech in Computer Science and Engineering</em><span class="dt">2022 – 2026</span></div></div>
+      <div class="job"><div class="jh"><h3>National Victor Public School</h3><span class="loc">New Delhi, India</span></div>
+        <div class="jr"><em>CBSE Board</em><span class="dt">Passed: 2021</span></div></div>
+
+      <h2>Projects</h2>${proj("Superposition", "Departure-time prediction app", "TypeScript, React, Cloudflare Workers, D1, Python, LightGBM", [
+        "Built a full-stack app that predicts the latest safe departure time to arrive on schedule, modeling travel time in log-space with an Ornstein–Uhlenbeck variance curve and conformal calibration for honest, horizon-aware quantile estimates.",
+        "Architected a monorepo: a dependency-free TypeScript math package, a Cloudflare Worker API with a 10-minute cron pipeline (routing, weather, Web Push), a Vite/React PWA, and a weekly Python LightGBM training job.",
+        "Verified the engine with 200+ automated tests (SDE-simulation checks of the variance model, conformal-coverage tests) and deployed the entire stack on a $0 free-tier footprint."])}${proj("Fake News Detection", "Scalable ML pipeline", "Python, PySpark MLlib, TF-IDF, Scikit-learn, NLTK", [
+        "Built a scalable big-data ML pipeline in PySpark to classify news articles as real or fake on a Kaggle dataset of article text and metadata.",
+        "Engineered TF-IDF features with word/character counts and sentiment scores, then trained and compared Logistic Regression, Naive Bayes and Random Forest classifiers with hyperparameter tuning.",
+        "Evaluated models on accuracy, precision, recall, F1-score and ROC-AUC, surfacing fake-news patterns via word clouds, confusion matrices and ROC curves."])}${proj("SteamOS NVIDIA USB Installer", "Windows desktop utility", "Electron, TypeScript, Node.js, WSL2, Vite", [
+        "Built a Windows desktop app that converts an official SteamOS recovery image into a bootable USB installer with the NVIDIA open driver baked in, orchestrating an isolated WSL2 Arch build without modifying the source image.",
+        "Implemented safe raw USB flashing with layered safeguards (system-disk exclusion, removable-only, capacity and identity re-verification, multi-factor confirmation) plus post-write verification.",
+        "Covered all decision logic with 113 unit tests under strict TypeScript, shipping a signed-workflow NSIS installer built and released via GitHub Actions."])}${proj("Accela", "Modular Discord bot suite", "Python, discord.py, SQLite, Docker, Steam API", [
+        "Developed a multi-module gaming-community bot (moderation, onboarding, analytics, recommendations, trading) plus a one-command server builder that idempotently provisions 24 roles, 40 channels and AutoMod rules.",
+        "Built a heuristic moderation engine and a content-based game recommender with feedback learning; persisted state in SQLite (aiosqlite), integrated the Steam API, and containerized with Docker Compose."])}${proj("Devbhoomi Realtors", "Live real estate website", "HTML, CSS, JavaScript, Responsive Design, SEO", [
+        "Designed and shipped a live, bilingual (English/Hindi) multi-page website for a Uttarakhand land-and-cottage business, with property listings, area guides and a turnkey-cottage section.",
+        "Built an interactive land-unit converter (nali/gaj/sq ft/sq m), a land-valuation lead-capture flow and WhatsApp deep-link inquiries, with SEO metadata, Open Graph tags and a responsive layout."])}${proj("Pricely", "Offline pricing and profit analytics PWA", "JavaScript, HTML, Service Workers", [
+        "Built a single-file offline PWA with a rate-based pricing engine (contribution per hour, effective material cost, integer-paise money) and dashboards for revenue and per-job profitability.",
+        "Backed the pricing engine with 144 automated property and regression tests covering pricing invariants and every UI control."])}
+      <p class="more"><a href="/all-projects/">See all ${PROJECTS.length} projects with live links &#8594;</a></p>
+
+      <h2>Technical skills</h2>
+      <div class="skills">${skill("Languages", "Python, SQL, TypeScript, JavaScript")}${skill("Data & ML", "PySpark (MLlib), Scikit-learn, LightGBM, Pandas, NumPy, NLTK, TF-IDF, Matplotlib, Seaborn")}${skill("Concepts", "Regression, Classification, Clustering, Feature Engineering, Time Series Forecasting, NLP, Quantile & Conformal Prediction")}${skill("Web & App", "React, Vite, Node.js, Electron, discord.py, aiohttp, Progressive Web Apps (Service Workers)")}${skill("Cloud & Tools", "Cloudflare Workers/D1, Netlify, Docker, WSL2, Git & GitHub, GitHub Actions, Jupyter, VS Code, Excel")}${skill("AI tools", "Claude, OpenAI, Codex, Gemini, HeyGen, llama.cpp")}${skill("Databases", "SQLite, D1, MySQL, Supabase")}${skill("OS", "Windows, Linux, macOS")}</div>
+
+      <h2>Certifications</h2>
+      <ul class="certs">${P.credentials.map((c) => `<li>${esc(c.replace(": ", " – "))}</li>`).join("")}<li>C++ Programming Certification (self-paced)</li></ul>
+      <p class="stamp">Resume last updated: November 2026</p>
+    </article>`;
+  write(page.file, shell(page, body, COMMON_SCRIPTS));
+  log.push("built resume page");
 }
 
 // ---- legal pages ----
@@ -361,7 +450,11 @@ function retire(dir) {
     log.push("retired " + rel + " -> " + target);
   }
 }
-retire("lab"); retire("projects");
+// Remove the template's old pages instead of leaving stubs: files shadow host redirects, and the hosts'
+// 301 rules (vercel.json, netlify.toml) send /projects/* and /lab/* to the right pages.
+for (const d of ["lab", "projects"]) {
+  if (fs.existsSync(path.join(SITE, d))) { fs.rmSync(path.join(SITE, d), { recursive: true, force: true }); log.push("removed retired " + d + "/"); }
+}
 
 // ---- webmanifest, robots, sitemap ----
 write("site.webmanifest", JSON.stringify({ name: "Aryan Singh | Portfolio", short_name: "Aryan Singh", start_url: "/", display: "standalone", background_color: "#050609", theme_color: "#050609",
