@@ -1,0 +1,55 @@
+/* All Projects page. Built from the site's own vocabulary: flat dark ground, cream type,
+   red accent, big tight headlines, hairline rules and a large index number (as in Services). */
+@font-face { font-family: "PJS"; src: url("/assets/fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_TknNTxXUEKi4Rw.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
+
+:root { --ink: #050609; --cream: #e8d9c8; --red: #f94137; --mute: #adadad; --dim: #7a7a7a; --rule: #262a2d;
+  --cp-yellow: #f94137; --cp-cyan: #e8d9c8; --cp-yellow-glow: rgba(249, 65, 55, .45); }
+* { box-sizing: border-box; }
+html { background: var(--ink); }
+body { margin: 0; background: var(--ink); color: var(--cream); font-family: "PJS", "Plus Jakarta Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, p, a, li, span { font-family: "PJS", "Plus Jakarta Sans", system-ui, sans-serif; }
+a { color: inherit; text-decoration: none; }
+
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 50; height: 56px; padding: 0 clamp(16px, 2.2vw, 32px); display: flex; align-items: center; justify-content: space-between; background: rgba(5, 6, 9, .9); border-bottom: 1px solid var(--rule); }
+.nav .logo { font-weight: 700; font-size: 14px; letter-spacing: .32em; color: #fff; }
+.nav ul { display: flex; gap: clamp(18px, 3vw, 44px); list-style: none; margin: 0; padding: 0; }
+.nav ul a { font-size: 15px; font-weight: 500; color: #fff; }
+.nav ul a:hover, .nav ul a[aria-current] { color: var(--red); }
+
+.wrap { max-width: 1440px; margin: 0 auto; padding: 0 clamp(16px, 2.2vw, 32px); }
+.head { padding: clamp(110px, 15vw, 180px) 0 clamp(36px, 5vw, 72px); }
+.eyebrow { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; color: var(--cream); }
+.eyebrow:before { content: "\2731"; color: var(--red); font-size: 18px; }
+.head h1 { margin: 26px 0 0; font-weight: 800; font-size: clamp(54px, 11.2vw, 180px); line-height: .88; letter-spacing: -.055em; text-transform: uppercase; color: var(--cream); }
+.head h1 em { font-style: normal; color: var(--red); }
+.head p { margin: 28px 0 0; max-width: 52ch; font-size: clamp(16px, 1.5vw, 20px); line-height: 1.5; color: var(--mute); }
+
+/* ruled list: one project per row */
+.list { border-top: 1px solid var(--rule); margin-bottom: 96px; }
+.row { display: grid; grid-template-columns: 96px minmax(0, 1.15fr) minmax(0, 1.5fr) 200px; gap: 24px; align-items: start; padding: 34px 0; border-bottom: 1px solid var(--rule); transition: background .2s; }
+.row:hover { background: rgba(232, 217, 200, .03); }
+.row .n { font-size: 20px; font-weight: 500; color: var(--dim); letter-spacing: -.02em; transition: color .2s; }
+.row .t { text-transform: none; margin: 0; font-weight: 600; font-size: clamp(30px, 3.6vw, 52px); line-height: 1; letter-spacing: -.045em; color: var(--cream); transition: color .2s; }
+.row:hover .t, .row:hover .n { color: var(--red); }
+.row .k { margin-top: 12px; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.row .d { margin: 0; font-size: 17px; line-height: 1.5; color: var(--mute); max-width: 48ch; }
+.row .s { margin-top: 12px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
+.row .l { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.row .l a { font-size: 16px; font-weight: 500; color: var(--cream); border-bottom: 1px solid var(--rule); padding-bottom: 2px; transition: color .2s, border-color .2s; }
+.row .l a:hover { color: var(--red); border-color: var(--red); }
+
+@media (max-width: 900px) { .row { grid-template-columns: 56px 1fr; } .row .dw, .row .l { grid-column: 2; } }
+
+.foot { padding: 26px 0 40px; font-size: 14px; color: var(--mute); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.foot a:hover { color: var(--red); }
+
+/* static pages: legal copy */
+.foot .legal { flex-basis: 100%; }
+.prose { padding: clamp(110px, 14vw, 170px) 0 96px; max-width: 760px; }
+.prose h1 { margin: 22px 0 28px; font-weight: 800; font-size: clamp(44px, 8vw, 104px); line-height: .9; letter-spacing: -.05em; text-transform: uppercase; color: var(--cream); }
+.prose h2 { margin: 40px 0 10px; font-size: 22px; font-weight: 700; letter-spacing: -.02em; text-transform: none; color: var(--cream); }
+.prose p { margin: 0 0 14px; font-size: 17px; line-height: 1.65; color: var(--mute); }
+.prose p.lede { font-size: 21px; color: var(--cream); }
+.prose a { color: var(--cream); border-bottom: 1px solid var(--red); }
+.prose a:hover { color: var(--red); }
+.prose .stamp { margin-top: 36px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }

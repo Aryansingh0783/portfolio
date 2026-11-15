@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "",
+  "buildCommand": "node tools/seo.js",
+  "outputDirectory": "site",
+  "trailingSlash": true,
+  "cleanUrls": false,
+  "redirects": [
+    { "source": "/projects", "destination": "/all-projects/", "permanent": true },
+    { "source": "/projects/:path*", "destination": "/all-projects/", "permanent": true },
+    { "source": "/lab", "destination": "/", "permanent": true },
+    { "source": "/lab/:path*", "destination": "/", "permanent": true }
+  ],
+  "headers": [
+    { "source": "/(.*)", "headers": [
+      { "key": "X-Content-Type-Options", "value": "nosniff" },
+      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+    ] }
+  ]
+}

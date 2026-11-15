@@ -1,0 +1,12 @@
+{
+  "name": "aryan-singh-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfolio of Aryan Singh, AI engineer in Delhi. Static site; node tools/seo.js stamps SEO tags, sitemap and robots.",
+  "scripts": {
+    "build": "node tools/seo.js",
+    "start": "node server.mjs",
+    "check": "node tools/check-js.js"
+  },
+  "engines": { "node": ">=18" }
+}

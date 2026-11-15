@@ -1,0 +1,2 @@
+import{t as e}from"./rolldown-runtime.Dh6celcD.mjs";function t(e,t){return{description:`Aryan Singh is an AI engineer in Delhi who builds and tests AI tools, desktop apps and web apps. See real projects: Superposition, Refract, ReBackUp and more.`,favicon:`/favicon-32.png`,robots:`max-image-preview:large`,socialImage:`/og-image.jpg`,title:`Aryan Singh | AI Engineer in Delhi`}}var n=e((()=>{}));export{t as n,n as t};
+//# sourceMappingURL=shared-lib.mcl3f2QE.mjs.map
